@@ -1,4 +1,5 @@
 # monte
-Monte Carlo examples
-including a pi generator.
-Run the pi generator several times to get a meaningful average.
+Monte Carlo and rng examples
+including a pi generator and throwing dice.
+Windows Cmd Line Release is monte.exe. 
+Use Monte --help for details.
