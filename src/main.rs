@@ -1,14 +1,15 @@
 
-// main.rs a multiple π generator in monte
-// ver 04 Dec 23
+// main.rs provides random functions in monte
+// ver 06 Dec 23
    use crate::monty::monty2;
  //  use std::env;
    pub mod monty;
-   
+
 use std::env;   
 extern crate rand;
 // import commonly used items from the prelude:
 use rand::prelude::*;
+use indicatif::ProgressBar;
 
 fn main () {  // random	
 	let args: Vec<_> = env::args().collect();
@@ -21,34 +22,36 @@ fn main () {  // random
   	    let arg1 = env::args().nth(1).expect("no arg1");
 //            println!("arg1={}", arg1);
 	    if arg1 == "pi"  {  // finding pi
-            println!("Finding π");
-			let mut ctr = 1; // loop dtr
+			let mut ctr = 1; // loop ctr
 			let mut ctr2 =1.0; // divisor
-			if args.len() == 2 { // no count, default to 2 
-			    let arg2 = "2";
+			if args.len() == 2 { // no count, default to 4
+			    let arg2 = "4";
 				ctr = arg2.parse().expect("not an int");
 				ctr2 = arg2.parse().expect("not a float");
-				println!("no count specified, so using 2 as default");
-				println!("a higher count is more eccurate but takes longer");
+				println!("no count specified, so using {ctr} as default");
+				println!("a higher count is more accurate but takes longer");
 			}  // end 2 args
 			if args.len() == 3 {	// with count
 				let arg2 = env::args().nth(2).expect("no arg2");
 				ctr = arg2.parse().expect("not an int");
 				ctr2 = arg2.parse().expect("not a float");
-				if ctr > 5 {	// too big
-				    println!("count {ctr} too big, using 5");
-					ctr=5; ctr2=5.0;
+				if ctr > 10 {	// too big
+				    println!("count {ctr} too big for pi, using 10");
+					ctr=10; ctr2=10.0;
 				}	
 			}  // end 3 args 
+		println!("Finding π using {ctr} iterations");
 	        let mut i = 0;
 	        let mut pivalue = 0.0;
+			let pb = ProgressBar::new(ctr);
             while i < ctr {   // cycle thru monty2
  	            pivalue = pivalue + monty2();
+				pb.inc(1);
                 i = i + 1;
 	        }   // end while
-	        println!("pisum = {:.4}", pivalue);
+//	        println!("pisum = {:.4}", pivalue);
             pivalue = (pivalue)/ctr2;
-	        println!("pivalue = {:.4}" , pivalue);	 
+	        println!("Averaged pivalue = {:.4}" , pivalue);	 
 		} else if arg1 == "dice" {   // roll dice
 			let mut ctr = 1; // throw ctr
 			if args.len() == 2 { // no count, default to 6 
@@ -81,7 +84,7 @@ fn main () {  // random
 				   print! {"{}",'\x07'}; break; // bell and that's it
 				}
 				i = i + 1;
-			}   // end while	
+			}   // end while i	
 			println!();
 		} else if arg1.contains("help") || arg1.contains("-h") {   // help, -help, --help or -h
 		    println!("This program demonstrates random maths");
@@ -90,7 +93,7 @@ fn main () {  // random
 			println!("Example 1: random pi does a monte carlo simulation a number of times ");
 			println!("Example 2: random dice throws some dice a number of times ");
 		} else if arg1 == "--V" {   // version
-			println!("Version 05 Dec 23");
+			println!("Version 1.03 06 Dec 23");
 		} else {  // not pi, dice or help
             println!("unsuported random option {arg1}");
 		    println!("this version only supports Pi or Dice options");
